@@ -1,6 +1,6 @@
 package com.iurii.mysql.dao;
 
-import com.iurii.mysql.POJO.AuthorOb;
+import com.iurii.mysql.domain.AuthorOb;
 
 import java.util.List;
 
