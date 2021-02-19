@@ -1,14 +1,11 @@
 package com.iurii.mysql.dao;
 
-import com.iurii.mysql.domain.AuthorOb;
+import com.iurii.mysql.POJO.AuthorOb;
+import lombok.Data;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
@@ -16,15 +13,11 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
+@Data
 public class AuthorDaoJdbc implements AuthorDao {
 
     private final JdbcOperations operations;
     private final NamedParameterJdbcOperations namedOperations;
-
-    public AuthorDaoJdbc(JdbcOperations operations, NamedParameterJdbcOperations namedOperations) {
-        this.operations = operations;
-        this.namedOperations = namedOperations;
-    }
 
     @Override
     public void count() {
