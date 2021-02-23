@@ -4,10 +4,10 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 @Data
-public class BookOb {
-    private final int idBook;
-    private final String bookName;
+public class Book {
+    private final long id;
+    private final String name;
     private final int yearOfPublishing;
-    private final int authorId;
+    private final long authorId;
     private final String genre;
 }

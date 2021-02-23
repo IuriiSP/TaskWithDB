@@ -1,6 +1,6 @@
 package com.iurii.mysql.dao;
 
-import com.iurii.mysql.POJO.GenreOb;
+import com.iurii.mysql.POJO.Genre;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
@@ -18,40 +18,44 @@ import java.util.Map;
 public class GenreDaoJdbc implements GenreDao {
     private final JdbcOperations operations;
     private final NamedParameterJdbcOperations namedOperations;
+
     @Override
-    public void count() {
+    public int count() {
         int count = operations.queryForObject("select count(*) from genres", Integer.class);
-        System.out.println(count);
+        return count;
     }
 
     @Override
-    public void insert(GenreOb genreOb) {
-        operations.update("insert into genres (genreId, `Genre`) values (?,?)", genreOb.getGenreId(), genreOb.getGenre());
+    public int insert(Genre genre) {
+        int numberOfRows = operations.update("insert into genres (genreId, `Genre`) values (?,?)", genre.getId(), genre.getGenre());
+        return numberOfRows;
     }
 
     @Override
-    public GenreOb getById(int id) {
+    public Genre findById(int id) {
 
         Map<String, Object> params = Collections.singletonMap("id", id);
         return namedOperations.queryForObject("select * from genres where genreId = :id", params, new GenreDaoJdbc.GenreMapper());
     }
 
     @Override
-    public List<GenreOb> getAll() {
+    public List<Genre> findAll() {
         return namedOperations.query("select * from genres", new GenreDaoJdbc.GenreMapper());
     }
 
     @Override
-    public void deleteById(int id) {
-        Map<String, Object>params = Collections.singletonMap("id", id);
-        namedOperations.update("delete from genres where genreId = :id", params);
+    public int deleteById(int id) {
+        Map<String, Object> params = Collections.singletonMap("id", id);
+        int count = namedOperations.update("delete from genres where genreId = :id", params);
+        return count;
     }
-    public static class GenreMapper implements RowMapper<GenreOb> {
+
+    public static class GenreMapper implements RowMapper<Genre> {
         @Override
-        public GenreOb mapRow(ResultSet resultSet, int i) throws SQLException {
+        public Genre mapRow(ResultSet resultSet, int i) throws SQLException {
             int genre_id = resultSet.getInt("genreId");
             String genre = resultSet.getString("Genre");
-            return new GenreOb(genre_id, genre);
+            return new Genre(genre_id, genre);
         }
     }
 }

@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 @Data
-public class GenreOb {
-    private final int genreId;
-    private final String Genre;
+public class Genre {
+    private final long id;
+    private final String genre;
 }

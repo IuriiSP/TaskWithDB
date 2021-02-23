@@ -6,9 +6,9 @@ import lombok.RequiredArgsConstructor;
 import java.util.Objects;
 
 @Data
-public class AuthorOb {
-    private final int id;
+public class Author {
+    private final long id;
     private final String name;
-    private final int code;
+    private final long code;
 }
 

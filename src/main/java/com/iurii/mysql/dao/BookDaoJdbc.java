@@ -1,6 +1,6 @@
 package com.iurii.mysql.dao;
 
-import com.iurii.mysql.POJO.BookOb;
+import com.iurii.mysql.POJO.Book;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
@@ -19,43 +19,47 @@ public class BookDaoJdbc implements BookDao {
     private final JdbcOperations operations;
     private final NamedParameterJdbcOperations namedOperations;
     @Override
-    public void count() {
+    public int count() {
         int count = operations.queryForObject("select count(*) from books", Integer.class);
-        System.out.println(count);
+        return count;
     }
 
     @Override
-    public void insert(BookOb bookOb) {
+    public int insert(Book book) {
+        int numberOfRows =
         operations.update("insert into books (idBooks, `BookName`, yearOfPublishing, authorId, `genre`) values (?,?,?,?,?)",
-                bookOb.getIdBook(), bookOb.getBookName(), bookOb.getYearOfPublishing(), bookOb.getAuthorId(), bookOb.getGenre());
+                book.getId(), book.getName(), book.getYearOfPublishing(), book.getAuthorId(), book.getGenre());
+        return numberOfRows;
     }
 
     @Override
-    public BookOb getById(int id) {
+    public Book findById(int id) {
         Map<String, Object> params = Collections.singletonMap("id", id);
         return namedOperations.queryForObject("select * from books where idBooks = :id", params, new BookDaoJdbc.BookMapper());
     }
 
     @Override
-    public List<BookOb> getAll() {
+    public List<Book> findAll() {
         return namedOperations.query("select * from books", new BookDaoJdbc.BookMapper());
     }
 
     @Override
-    public void deleteById(int id) {
+    public int deleteById(int id) {
         Map<String, Object>params = Collections.singletonMap("id", id);
+        int numberOfRows =
         namedOperations.update("delete from books where idBooks = :id", params);
+        return numberOfRows;
     }
 
-    public static class BookMapper implements RowMapper<BookOb> {
+    public static class BookMapper implements RowMapper<Book> {
         @Override
-        public BookOb mapRow(ResultSet resultSet, int i) throws SQLException {
+        public Book mapRow(ResultSet resultSet, int i) throws SQLException {
             int id = resultSet.getInt("idBooks");
-            String name = resultSet.getString("Book Name");
-            int yearOfPublishing = resultSet.getInt("year of publishing");
+            String name = resultSet.getString("BookName");
+            int yearOfPublishing = resultSet.getInt("yearOfPublishing");
             int author_id = resultSet.getInt("authorId");
             String genre = resultSet.getString("genre");
-            return new BookOb(id, name, yearOfPublishing, author_id, genre);
+            return new Book(id, name, yearOfPublishing, author_id, genre);
         }
     }
 }

@@ -1,9 +1,9 @@
 package com.iurii.mysql.service;
 
-import com.iurii.mysql.POJO.BookOb;
-import com.iurii.mysql.POJO.GenreOb;
+import com.iurii.mysql.POJO.Book;
+import com.iurii.mysql.POJO.Genre;
 import com.iurii.mysql.dao.AuthorDao;
-import com.iurii.mysql.POJO.AuthorOb;
+import com.iurii.mysql.POJO.Author;
 import com.iurii.mysql.dao.BookDao;
 import com.iurii.mysql.dao.GenreDao;
 import lombok.RequiredArgsConstructor;
@@ -23,17 +23,17 @@ public class ShellService {
 
     @ShellMethod(key = "authorCount", value = "число авторов")
     public void authorCount() {
-        authorDao.count();
+        System.out.println("число авторов: " + authorDao.count());
     }
 
     @ShellMethod(key = "genreCount", value = "Число жанров")
     public void genreCount() {
-        genreDao.count();
+        System.out.println("Число жанров:" + genreDao.count());
     }
 
     @ShellMethod(key = "bookCount", value = "Число книг")
     public void bookCount() {
-        bookDao.count();
+        System.out.println("Число книг:" + bookDao.count());
     }
 
     @ShellMethod(key = "authorInsert", value = "добавить элемент в таблицу Авторов")
@@ -43,8 +43,9 @@ public class ShellService {
             int id = Integer.parseInt(reader.readLine());
             String name = reader.readLine();
             int code = Integer.parseInt(reader.readLine());
-            AuthorOb authorOb = new AuthorOb(id, name, code);
-            authorDao.insert(authorOb);
+            Author author = new Author(id, name, code);
+            int numberOfRows = authorDao.insert(author);
+            System.out.println("Операция затронула строк: " + numberOfRows);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -56,8 +57,9 @@ public class ShellService {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             int genreId = Integer.parseInt(reader.readLine());
             String genre = reader.readLine();
-            GenreOb genreOb = new GenreOb(genreId, genre);
-            genreDao.insert(genreOb);
+            Genre genreOb = new Genre(genreId, genre);
+            int numberOfRows = genreDao.insert(genreOb);
+            System.out.println("Операция затронула строк: " + numberOfRows);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -67,69 +69,71 @@ public class ShellService {
     public void bookInsert() {
         try  {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
             int idBooks = Integer.parseInt(reader.readLine());
             String bookName = reader.readLine();
             int yearOFPublishing = Integer.parseInt(reader.readLine());
             int autor_id = Integer.parseInt(reader.readLine());
             String genre = reader.readLine();
-            BookOb bookOb = new BookOb(idBooks, bookName, yearOFPublishing, autor_id, genre);
-            bookDao.insert(bookOb);
+            Book book = new Book(idBooks, bookName, yearOFPublishing, autor_id, genre);
+            int numberOfRows = bookDao.insert(book);
+            System.out.println("Операция затронула строк: " + numberOfRows);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    @ShellMethod(key = "authorGetById", value = "Получить автора по id")
+    @ShellMethod(key = "authorFindById", value = "Получить автора по id")
     public void authorGetById() {
         try  {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             int id = Integer.parseInt(reader.readLine());
-            AuthorOb authorOb = authorDao.getById(id);
-            System.out.println(authorOb.toString());
+            Author author = authorDao.findById(id);
+            System.out.println(author.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    @ShellMethod(key = "genreGetById", value = "Получить жанр по id")
+    @ShellMethod(key = "genreFindById", value = "Получить жанр по id")
     public void genreGetById() {
         try  {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             int id = Integer.parseInt(reader.readLine());
-            GenreOb genreOb = genreDao.getById(id);
-            System.out.println(genreOb.toString());
+            Genre genre = genreDao.findById(id);
+            System.out.println(genre.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    @ShellMethod(key = "bookGetById", value = "Получить книгу по id")
+    @ShellMethod(key = "bookFindById", value = "Получить книгу по id")
     public void bookGetById() {
         try  {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             int id = Integer.parseInt(reader.readLine());
-            BookOb bookOb = bookDao.getById(id);
-            System.out.println(bookOb.toString());
+            Book book = bookDao.findById(id);
+            System.out.println(book.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    @ShellMethod(key = "authorGetAll", value = "получить все записи авторы")
+    @ShellMethod(key = "authorFindAll", value = "получить все записи авторы")
     public void authorGetAll() {
-        List<AuthorOb> authors = authorDao.getAll();
+        List<Author> authors = authorDao.findAll();
         authors.forEach(a -> System.out.println(a.toString()));
     }
 
-    @ShellMethod(key = "genreGetAll", value = "получить все записи жанры")
+    @ShellMethod(key = "genreFindAll", value = "получить все записи жанры")
     public void genreGetAll() {
-        List<GenreOb> genres = genreDao.getAll();
+        List<Genre> genres = genreDao.findAll();
         genres.forEach(g -> System.out.println(g.toString()));
     }
 
-    @ShellMethod(key = "bookGetAll", value = "получить все записи Книги")
+    @ShellMethod(key = "bookFindAll", value = "получить все записи Книги")
     public void bookGetAll() {
-        List<BookOb> books = bookDao.getAll();
+        List<Book> books = bookDao.findAll();
         books.forEach(b -> System.out.println(b.toString()));
     }
 
@@ -138,9 +142,10 @@ public class ShellService {
         try  {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             int id = Integer.parseInt(reader.readLine());
-            authorDao.deleteById(id);
+            int numberOfRows = authorDao.deleteById(id);
+            System.out.println("Операция затронула строк: " + numberOfRows);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -149,9 +154,10 @@ public class ShellService {
         try  {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             int id = Integer.parseInt(reader.readLine());
-            genreDao.deleteById(id);
+            int numberOfRows = genreDao.deleteById(id);
+            System.out.println("Операция затронула строк: " + numberOfRows);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -160,7 +166,8 @@ public class ShellService {
         try  {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             int id = Integer.parseInt(reader.readLine());
-            bookDao.deleteById(id);
+            int numberOfRows = bookDao.deleteById(id);
+            System.out.println("Операция затронула строк: " + numberOfRows);
         } catch (Exception e) {
 
         }
