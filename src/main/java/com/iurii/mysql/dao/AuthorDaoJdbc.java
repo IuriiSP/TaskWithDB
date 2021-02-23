@@ -21,16 +21,14 @@ public class AuthorDaoJdbc implements AuthorDao {
 
     @Override
     public int count() {
-        int count = operations.queryForObject("select count(*) from authors", Integer.class);
-        return count;
+        return operations.queryForObject("select count(*) from authors", Integer.class);
     }
 
 
     @Override
     public int insert(Author author) {
-            int numberOfRows = operations.update("insert into authors (id, `name`, code) values (?,?,?)", author.getId(),
+            return operations.update("insert into authors (id, `name`, code) values (?,?,?)", author.getId(),
                     author.getName(), author.getCode());
-            return numberOfRows;
     }
 
     @Override
@@ -48,8 +46,7 @@ public class AuthorDaoJdbc implements AuthorDao {
     public int deleteById(int id) {
         int numberOfRows;
         Map<String, Object>params = Collections.singletonMap("id", id);
-        numberOfRows = namedOperations.update("delete from authors where id = :id", params);
-        return numberOfRows;
+        return namedOperations.update("delete from authors where id = :id", params);
     }
 
     public static class AuthorMapper implements RowMapper<Author>{

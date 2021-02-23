@@ -20,16 +20,13 @@ public class BookDaoJdbc implements BookDao {
     private final NamedParameterJdbcOperations namedOperations;
     @Override
     public int count() {
-        int count = operations.queryForObject("select count(*) from books", Integer.class);
-        return count;
+        return operations.queryForObject("select count(*) from books", Integer.class);
     }
 
     @Override
     public int insert(Book book) {
-        int numberOfRows =
-        operations.update("insert into books (idBooks, `BookName`, yearOfPublishing, authorId, `genre`) values (?,?,?,?,?)",
+        return operations.update("insert into books (idBooks, `BookName`, yearOfPublishing, authorId, `genre`) values (?,?,?,?,?)",
                 book.getId(), book.getName(), book.getYearOfPublishing(), book.getAuthorId(), book.getGenre());
-        return numberOfRows;
     }
 
     @Override
@@ -46,9 +43,7 @@ public class BookDaoJdbc implements BookDao {
     @Override
     public int deleteById(int id) {
         Map<String, Object>params = Collections.singletonMap("id", id);
-        int numberOfRows =
-        namedOperations.update("delete from books where idBooks = :id", params);
-        return numberOfRows;
+        return namedOperations.update("delete from books where idBooks = :id", params);
     }
 
     public static class BookMapper implements RowMapper<Book> {

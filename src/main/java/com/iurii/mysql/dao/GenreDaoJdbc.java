@@ -21,14 +21,12 @@ public class GenreDaoJdbc implements GenreDao {
 
     @Override
     public int count() {
-        int count = operations.queryForObject("select count(*) from genres", Integer.class);
-        return count;
+        return operations.queryForObject("select count(*) from genres", Integer.class);
     }
 
     @Override
     public int insert(Genre genre) {
-        int numberOfRows = operations.update("insert into genres (genreId, `Genre`) values (?,?)", genre.getId(), genre.getGenre());
-        return numberOfRows;
+        return operations.update("insert into genres (genreId, `Genre`) values (?,?)", genre.getId(), genre.getGenre());
     }
 
     @Override
@@ -46,8 +44,7 @@ public class GenreDaoJdbc implements GenreDao {
     @Override
     public int deleteById(int id) {
         Map<String, Object> params = Collections.singletonMap("id", id);
-        int count = namedOperations.update("delete from genres where genreId = :id", params);
-        return count;
+        return namedOperations.update("delete from genres where genreId = :id", params);
     }
 
     public static class GenreMapper implements RowMapper<Genre> {
