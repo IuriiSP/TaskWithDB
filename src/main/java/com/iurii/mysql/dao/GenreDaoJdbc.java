@@ -51,7 +51,7 @@ public class GenreDaoJdbc implements GenreDao {
         @Override
         public Genre mapRow(ResultSet resultSet, int i) throws SQLException {
             int genre_id = resultSet.getInt("genreId");
-            String genre = resultSet.getString("Genre");
+            String genre = resultSet.getString("genre");
             return new Genre(genre_id, genre);
         }
     }

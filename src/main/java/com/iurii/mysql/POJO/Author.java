@@ -1,14 +1,35 @@
 package com.iurii.mysql.POJO;
 
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.Objects;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-@Data
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@Table(name = "authors")
+
 public class Author {
-    private final long id;
-    private final String name;
-    private final long code;
+    @Id
+    private long id;
+    private String name;
+    private long code;
+
+    public Author(long id, String name, long code) {
+        this.id = id;
+        this.name = name;
+        this.code = code;
+    }
+
+    @Override
+    public String toString() {
+        return (this.getId() + " " + this.getName() + " " + this.getCode());
+    }
 }
 
