@@ -7,6 +7,7 @@ import com.iurii.mysql.POJO.Author;
 
 import com.iurii.mysql.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
@@ -19,9 +20,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ShellService {
 
-    private final AuthorRepositoryJpa authorRepositoryJpa;
     private final GenreRepositoryJpa genreRepositoryJpa;
     private final CommentRepositoryJpa commentRepositoryJpa;
+    private final AuthorRepositoryJpa authorRepositoryJpa;
     private final BookRepositoryJpa bookRepositoryJpa;
 
     /**
@@ -41,7 +42,7 @@ public class ShellService {
             String name = reader.readLine();
             int code = Integer.parseInt(reader.readLine());
             Author author = new Author(id, name, code);
-            authorRepositoryJpa.insert(author);
+            authorRepositoryJpa.save(author);
             System.out.println("Добавлен автор " + author.getId());
         } catch (Exception e) {
             e.printStackTrace();
@@ -53,7 +54,7 @@ public class ShellService {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             long id = Integer.parseInt(reader.readLine());
-            Author author = authorRepositoryJpa.findById(id);
+            Author author = authorRepositoryJpa.findAuthorById(id);
             System.out.println(author.toString());
         } catch (Exception e) {
             e.printStackTrace();
@@ -94,7 +95,7 @@ public class ShellService {
             int id = Integer.parseInt(reader.readLine());
             String name = reader.readLine();
             Genre genre = new Genre(id, name);
-            genreRepositoryJpa.insert(genre);
+            genreRepositoryJpa.save(genre);
             System.out.println("Добавлен жанр " + genre.getId());
         } catch (Exception e) {
             e.printStackTrace();
@@ -148,7 +149,7 @@ public class ShellService {
             int bookId = Integer.parseInt(reader.readLine());
             String commentStr = reader.readLine();
             Comment comment = new Comment(id, bookId, commentStr);
-            commentRepositoryJpa.insert(comment);
+            commentRepositoryJpa.save(comment);
             System.out.println("Добавлен комментарий " + comment.getId());
         } catch (Exception e) {
             e.printStackTrace();
@@ -205,7 +206,7 @@ public class ShellService {
             long authorId = Integer.parseInt(reader.readLine());
             String genre = reader.readLine();
             Book book = new Book(id, name, yearOfPublishing, authorId, genre);
-            bookRepositoryJpa.insert(book);
+            bookRepositoryJpa.save(book);
             System.out.println("Добавлена книга " + book.getId());
         } catch (Exception e) {
             e.printStackTrace();
